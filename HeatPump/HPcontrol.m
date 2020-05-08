@@ -38,19 +38,47 @@ tau = collocation_points(d, 'legendre');
 T = 10;
 
 % Declare model variables
-x1 = SX.sym('x1');
-x2 = SX.sym('x2');
-x = [x1; x2];
-u = SX.sym('u');
+dotW = SX.sym('dotW');
+Textract = SX.sym('Textract');
+Theatout = SX.sym('Theatout');
+Theatin = SX.sym('Theatin');
+x = [Textract;Theatout];
+
+% Constant parameters of the equations
+Tlake= 7;
+dm_w1 = 11.38; % Massflow rate of refrigerant in condenser (kg/s)
+C_e = 4180 ; % Heat capacity of the evaporator (J/kg K)
+m_e = 1 ; % mass of evaporator
+dm_w2 = 11.38 ; % Massflow rate of refrigerant in condenser (kg/s)
+C_c = 4180 ; % Heat capacity of the Condenser (J/kg K)
+m_c = 1 ; % mass of condenser
+C_f = 1.107 ; % Heat capacity of the refrigerant (J/kg K)
+dW = 5 ; % dif of the work done to the HP cycle -> Energy input in Joules
+m_water = dm_w2*T;
+Cwater = 4180;
+CairVbuilding = 10000;
+Ke = dm_w1*C_f/C_e/m_e;
+Kc = dm_w2*C_f/C_c/m_c;
+Hd = 411.910431315784;
+Troom = 21;
 
 % Model equations
-xdot = [(1-x2^2)*x1 - x2 + u; x1];
+
+xdot = [-Ke*Textract-Ke*Tlake - dotW/(C_e*m_e)*(Theatout+Theatin+2*273.15)/((Theatout+Theatin-Tlake-Textract)-1);
+    -Kc*(-Theatout+Theatin) - dotW/(C_c*m_c)*(K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))-1)]
+% dotTextract = -Ke*Textract-Ke*Tlake - dotW/(C_e*m_e)*(Theatout+Theatin+2*273.15)/((Theatout+Theatin-Tlake-Textract)-1);
+% dotTheatout = -Kc*(-Theatout+Theatin) - dotW/(C_c*m_c)*(K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))-1);
+% Troom = (Theatout-Theatin)*m_water*Cwater-Hd)/(CairVbuilding+m_water*Cwater);
+% Theatin = (Troom*CairVbuilding + Hd+Cwater*m_water*Theatout)/(Cwater*m_water)
+% COP = K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))
 
 % Objective term
-L = x1^2 + x2^2 + u^2;
+L = COP*dotW;
 
 % Continuous time dynamics
-f = Function('f', {x, u}, {xdot, L});
+f = Function('f', {x, dotW, Theatin}, {xdot, L, (Troom*CairVbuilding + Hd+Cwater*m_water*Theatout)/(Cwater*m_water)});
+
+% --------------------VVV FUNCTION STILL NOT CHANGED HEREUNDRER VVV-------------------Thomas
 
 % Control discretization
 N = 20; % number of control intervals
@@ -63,7 +91,7 @@ J = 0;
 
 % "Lift" initial conditions
 Xk = opti.variable(2);
-opti.subject_to(Xk==[0; 1]);
+opti.subject_to(Xk==[0; 1]); % what is this ? The initial condition as well ? 
 opti.set_initial(Xk, [0; 1]);
 
 % Collect all states/controls
