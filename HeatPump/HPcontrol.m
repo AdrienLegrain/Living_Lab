@@ -81,7 +81,7 @@ f = Function('f', {x, dotW, Theatin}, {xdot, L, (Troom*CairVbuilding + Hd+Cwater
 % --------------------VVV FUNCTION STILL NOT CHANGED HEREUNDRER VVV-------------------Thomas
 
 % Control discretization
-N = 20; % number of control intervals
+N = 20; % number of control intervals --> How many should I choose ??  
 h = T/N;
 
 % Start with an empty NLP
@@ -111,10 +111,12 @@ for k=0:N-1
    opti.subject_to(-0.25 <= Xc(1,:));
    opti.set_initial(Xc, repmat([0;0],1,d));
 
-   % Evaluate ODE right-hand-side at all helper states
+   % Evaluate ODE right-hand-side at all helper states --> This is solving
+   % the ODE ??
    [ode, quad] = f(Xc, Uk);
 
-   % Add contribution to quadrature function
+   % Add contribution to quadrature function % I should add the total
+   % result right ? so COP*dotW ? 
    J = J + quad*B*h;
 
    % Get interpolating points of collocation polynomial
