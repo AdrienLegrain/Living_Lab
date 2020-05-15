@@ -45,6 +45,7 @@ Hd = 411.910431315784;
 % eq2 = -Kc*x(2)+Kc*x(5) - dW/(C_c*m_c)*((x(2)+2*273.15)/(x(2)-T_ein-x(1))-1)
 % eq3 = (Cwater*m_w2*(x(3)-x(5))-Hd)/(Cair*Vbuilding)
 % x(5) = (x(3)*m_water*Cwater-Hd)/(CairVbuilding + m_water*Cwater)
+
 f = @(t,x) [x(2);-Ke*x(1)+Ke*x(5) - dW/(C_e*m_e)*((x(2)+2*273.15)/(x(2)-T_ein-x(1))-1); x(4);-Kc*x(2)+ Kc*x(5) - dW/(C_c*m_c)*((x(2)+2*273.15)/(x(2)-T_ein-x(1))-1);x(5);(x(3)*m_water*Cwater-Hd)/(CairVbuilding + m_water*Cwater)];
 tspan = [0 10];
 X0 = [47; 0; 35; 0; 47; 0] 
