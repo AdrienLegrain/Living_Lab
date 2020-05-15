@@ -6,7 +6,7 @@ L=xlsread('demand_pred');%Forecasted consumption profile
 L_sim=xlsread('similar_days');%Similar day consumption profile
 K=xlsread('battery_parameters');%Estimated BESS voltage model parameters
 n=size(L,1);%Interval numbers
-L_avg=sum(L(:,2))/n*ones(n,1);%Flat demand
+L_avg=sum(L(:,2))/n*ones(n,1);%Flat target demand
 D=zeros(n,1);%Dispatch plan
 deltaT=15;%Step length(min)
 
@@ -51,10 +51,10 @@ for i=1:n
     %constr = [constr,SOE_min<=(SOE_0+deltaT/60/E_nom*( sum(L(1:i,2))+sum(F(1:i))-sum(L_max(1:i)) ))<=SOE_max];
     
     % Constraints on SOE(similar days)
-    for j=2:size(L_sim,2)
-     constr = [constr,SOE_min<=(SOE_0+deltaT/60/E_nom*( sum(L(1:i,2))+sum(F(1:i))-sum(L_sim(1:i,j)) ))<=SOE_max];
+    %for j=2:size(L_sim,2)
+    %constr = [constr,SOE_min<=(SOE_0+deltaT/60/E_nom*( sum(L(1:i,2))+sum(F(1:i))-sum(L_sim(1:i,j)) ))<=SOE_max];
 
-    end
+    %end
 end
 %% Run the solver and retrieve rounded optimal solution
 % Specify solver settings and run solver
@@ -102,8 +102,8 @@ ylabel('D')
 subplot(4,1,3)
 hold on; grid on;
 plot(F_star,'-k','markersize',20,'linewidth',2);
-plot(1:n,B_max*o,'r','linewidth',2)
-plot(1:n,-B_max*o,'r','linewidth',2)
+plot(1:n,(max(F_star)+1)*o,'r','linewidth',2)
+plot(1:n,(min(F_star)-1)*o,'r','linewidth',2)
 ylabel('F')
 
 subplot(4,1,4)
