@@ -58,12 +58,12 @@ dotTextract = -Ke*Textract+Ke*Tlake-dotW/(C_e*m_e)*(K*(0.5*(Theatout+Theatin)+27
  COP = K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))
 % % 
 
-xdot = [Ke*(Tlake-Textract)-dotW/(C_e*m_e)*((K*(0.5*(Theatin+Theatout)+273.15)/(0.5*(Theatin+Theatout)-0.5*(Tlake+Textract)))-1); Kc*(-Theatout+Theatin) - dotW/(C_c*m_c)*(K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))-1);((Theatin-Theatout)*dm_w2*Cwater-Hd)/(CairVbuilding*rhoBuilding); Theatout-0.1] 
-% CONSTANT ASSUMPTION !!! 
-solver  :   t_proc      (avg)   t_wall      (avg)    n_eval
-       nlp_f  | 154.75ms ( 51.12us) 146.38ms ( 48.36us)      3027
-       nlp_g  |   1.95 s ( 71.74us)   1.72 s ( 63.30us)     27192
-  nlp_grad_f  | 424.
+xdot = [-Ke
+    -Ke*Textract+Ke*Tlake-dotW/(C_e*m_e)*(K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))-1);
+    Kc*(-Theatout+Theatin) - dotW/(C_c*m_c)*(K*(0.5*(Theatout+Theatin)+273.15)/(0.5*(Theatout+Theatin)-0.5*(Textract+Tlake))-1);
+    (Theatin-Theatout)*dm_w2*Cwater-Hd)/(CairVbuilding*rhoBuilding); 
+Theatout-0.1] % CONSTANT ASSUMPTION !!! 
+
 % Objective term
 L = COP*dotW;
 

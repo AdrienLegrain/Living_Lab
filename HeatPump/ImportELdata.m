@@ -65,9 +65,9 @@ ELbuildings.UOR_Heat = data(:,70);
 %% Clear temporary variables
 clearvars data raw stringVectors;
 
-ELL_Elec = ELbuildings(:,[1:2,3:6])
-ELA_ELB_Elec = ELbuildings(:,[1:2,8:12])
-ELD_ELE_DIA_Elec= ELbuildings(:,[1:2,15:18])
-ELG_ELH_Elec= ELbuildings(:,[1:2,22:25])
-UOR_Elec = ELbuildings(:,[1:2,28:34])
-EL_Heat = ELbuildings(:,[1,2,7, 13,14,19,20,21,26,27,35])
+ELL_Elec = ELbuildings(:,[1:2,3:6]);
+ELA_ELB_Elec = ELbuildings(:,[1:2,8:12]);
+ELD_ELE_DIA_Elec= ELbuildings(:,[1:2,15:18]);
+ELG_ELH_Elec= ELbuildings(:,[1:2,22:25]);
+UOR_Elec = ELbuildings(:,[1:2,28:34]);
+EL_Heat = ELbuildings(:,[1,2,7, 13,14,19,20,21,26,27,35]);
