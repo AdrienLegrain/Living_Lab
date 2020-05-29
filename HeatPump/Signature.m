@@ -111,5 +111,6 @@ for building = 3:size(EL_Heat,2)
     ylabel('Energy [kWh]')
     legend('off')
 end
-print -depsc2 Fits.eps
+% print -depsc2 Fits.eps
+print -dpdf Fits.pdf
 
